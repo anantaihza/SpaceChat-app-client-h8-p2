@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <title>Login</title>
+  </head>
+  <body class="bg-[#EFF2F9] h-screen flex">
+    <div class="flex w-[75%] h-[70%] m-auto rounded-3xl drop-shadow-xl">
+      <div class="w-[50%] bg-[#6A74C9] rounded-l-3xl p-16 relative">
+        <h1 class="font-extrabold text-5xl text-[#FFFFFF]">
+          Welcome to <br />
+          SpaceChat
+        </h1>
+        <p class="mt-8 text-[#FFFFFF]">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi ea quod
+          enim assumenda perspiciatis reiciendis, repudiandae
+        </p>
+        <img
+          src="./assets/group.png"
+          class="absolute bottom-0 w-[80%]"
+          alt=""
+        />
+      </div>
+      <div class="w-[50%] bg-[#FFFFFF] rounded-r-3xl p-16">
+        <h1 class="font-extrabold text-4xl text-center">Login</h1>
+
+        <form class="mt-20">
+          <label
+            class="input input-bordered flex items-center gap-2 px-8 py-8 rounded-full mt-5"
+          >
+            <b class="font-bold">Email:</b>
+            <input type="email" class="grow" placeholder="" />
+          </label>
+          <label
+            class="input input-bordered flex items-center gap-2 px-8 py-8 rounded-full mt-5"
+          >
+            <b class="font-bold">Password:</b>
+            <input type="password" class="grow" placeholder="" />
+          </label>
+
+          <div class="flex justify-center mt-12">
+            <button
+              class="bg-[#6A74C9] btn px-12 text-lg rounded-full text-white"
+            >
+              Login
+            </button>
+          </div>
+        </form>
+        <p class="text-center font-medium mt-8 text-gray-400">
+          Don’t have an account? <a href="" class="text-[#6A74C9]">Create</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
