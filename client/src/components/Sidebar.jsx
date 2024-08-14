@@ -1,7 +1,16 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../contexts/UserContext';
 
 export default function Sidebar() {
+  const user = useContext(UserContext);
+  const navigate = useNavigate()
+
+  const handlerLogout = () => {
+    localStorage.clear()
+    navigate("/login")
+
+  }
   return (
     <>
       <button
@@ -111,10 +120,8 @@ export default function Sidebar() {
                     </div>
                   </div>
                   <div className="">
-                    <h4 className="leading-none">Ananta Ihza</h4>
-                    <p className="leading-none text-gray-400">
-                      ananta@mail.com
-                    </p>
+                    <h4 className="leading-none">{user.username}</h4>
+                    <p className="leading-none text-gray-400">{user.email}</p>
                   </div>
                 </div>
                 <ul
@@ -125,7 +132,7 @@ export default function Sidebar() {
                     <Link to="/profile">Profile</Link>
                   </li>
                   <li>
-                    <button>Log Out</button>
+                    <button onClick={handlerLogout}>Log Out</button>
                   </li>
                 </ul>
               </div>
