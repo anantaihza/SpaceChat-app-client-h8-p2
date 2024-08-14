@@ -1,14 +1,31 @@
-import axios from "../config/axiosInstance";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import axios from '../config/axiosInstance';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export default function ChatGroupPage() {
-  const [question, setQuestion] = useState("");
-  const [response, setResponse] = useState("");
+  const {id} = useParams()
+  const [question, setQuestion] = useState('');
+  const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
+  const [groupDetail, setGroupDetail] = useState({})
 
-  const navigate = useNavigate();
+  const fetchGroupDetail = async (id) => {
+    try {
+      const {data} = await axios({
+        method: "get",
+        url: `/myGroups/${id}/detail`,
+        headers: {
+          Authorization: `Bearer ${localStorage.access_token}`,
+        },
+      })
+
+      console.log(data)
+      setGroupDetail(data)
+    } catch (error) {
+      toast.error(error.response.data.message)
+    }
+  }
 
   const handleSubmitAPI = async (e) => {
     e.preventDefault();
@@ -18,8 +35,8 @@ export default function ChatGroupPage() {
 
       try {
         const { data } = await axios({
-          method: "post",
-          url: "/chats/openai",
+          method: 'post',
+          url: '/chats/openai',
           data: {
             inputPrompt: question,
           },
@@ -31,16 +48,16 @@ export default function ChatGroupPage() {
         console.log(data);
       } catch (error) {
         console.log(error);
-        toast.error("Error to fetch API");
+        toast.error('Error to fetch API');
       }
 
-      setQuestion("");
+      setQuestion('');
     }
   };
 
   useEffect(() => {
-    console.log(question);
-  }, [question]);
+    fetchGroupDetail(id)
+  }, []);
 
   return (
     <div className="flex-1 flex flex-col sm:ml-64 min-h-screen">
@@ -50,12 +67,12 @@ export default function ChatGroupPage() {
             <div className="w-10 rounded-full mr-4">
               <img
                 alt="Penerima"
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                src={groupDetail?.Group?.imgGroupUrl}
               />
               /&gt;
             </div>
           </div>
-          <div className="text-lg font-bold text-gray-800">HACKTIV8 GROUPS</div>
+          <div className="text-lg font-bold text-gray-800">{groupDetail?.Group?.name}</div>
         </div>
       </div>
       <div className="flex-1 overflow-y-auto px-20">
@@ -90,7 +107,7 @@ export default function ChatGroupPage() {
           {/* You can open the modal using ID.showModal() method */}
           <button
             className="text-[#6A74C9] px-2"
-            onClick={() => document.getElementById("my_modal_3").showModal()}
+            onClick={() => document.getElementById('my_modal_3').showModal()}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -109,8 +126,13 @@ export default function ChatGroupPage() {
           </button>
           <dialog id="my_modal_3" className="modal">
             <div className="modal-box bg-white">
+              <form method="dialog">
+                {/* if there is a button in form, it will close the modal */}
+                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                  ✕
+                </button>
+              </form>
               <form
-                method="dialog"
                 className="w-full max-w-md border-[#6A74C9]"
                 onSubmit={handleSubmitAPI}
               >
@@ -124,10 +146,10 @@ export default function ChatGroupPage() {
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
                 />
-                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                {/* <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
                   ✕
-                </button>
-                <button className="btn btn-md rounded-lg text-white bg-[#6A74C9]">
+                </button> */}
+                <button type='submit' className="btn btn-md rounded-lg text-white bg-[#6A74C9]">
                   SUBMIT
                 </button>
               </form>
