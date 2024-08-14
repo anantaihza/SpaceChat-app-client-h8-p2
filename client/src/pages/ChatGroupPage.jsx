@@ -1,10 +1,47 @@
-import React from 'react';
-
-
+import axios from "../config/axiosInstance";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function ChatGroupPage() {
+  const [question, setQuestion] = useState("");
+  const [response, setResponse] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  
+  const navigate = useNavigate();
+
+  const handleSubmitAPI = async (e) => {
+    e.preventDefault();
+
+    if (question.trim()) {
+      setLoading(true);
+
+      try {
+        const { data } = await axios({
+          method: "post",
+          url: "/chats/openai",
+          data: {
+            inputPrompt: question,
+          },
+          headers: {
+            Authorization: `Bearer ${localStorage.access_token}`,
+          },
+        });
+        setResponse(data.result);
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+        toast.error("Error to fetch API");
+      }
+
+      setQuestion("");
+    }
+  };
+
+  useEffect(() => {
+    console.log(question);
+  }, [question]);
+
   return (
     <div className="flex-1 flex flex-col sm:ml-64 min-h-screen">
       <div className="flex items-center justify-between px-20 py-4 bg-gray-100 border-b border-gray-200">
@@ -22,7 +59,6 @@ export default function ChatGroupPage() {
         </div>
       </div>
       <div className="flex-1 overflow-y-auto px-20">
-        
         <div className="chat chat-start px-4">
           <div className="chat-image avatar">
             <div className="w-10 rounded-full">
@@ -54,7 +90,7 @@ export default function ChatGroupPage() {
           {/* You can open the modal using ID.showModal() method */}
           <button
             className="text-[#6A74C9] px-2"
-            onClick={()=>document.getElementById('my_modal_3').showModal()}
+            onClick={() => document.getElementById("my_modal_3").showModal()}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -76,6 +112,7 @@ export default function ChatGroupPage() {
               <form
                 method="dialog"
                 className="w-full max-w-md border-[#6A74C9]"
+                onSubmit={handleSubmitAPI}
               >
                 <h3 className="text-lg font-bold py-2">
                   Hello, Can I help you!
@@ -84,7 +121,8 @@ export default function ChatGroupPage() {
                   className="w-full p-2 mb-4 rounded bg-[#EFF2F9] text-neutral"
                   rows={4}
                   placeholder="Enter your question?"
-                  defaultValue={''}
+                  value={question}
+                  onChange={(e) => setQuestion(e.target.value)}
                 />
                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
                   ✕
@@ -93,10 +131,12 @@ export default function ChatGroupPage() {
                   SUBMIT
                 </button>
               </form>
-              <div className="mt-6 w-full max-w-md bg-[#EFF2F9] p-4 rounded-lg shadow-md">
-                <h3 className="text-lg font-bold mb-2">Response :</h3>
-                <p>...</p>
-              </div>
+              {response && (
+                <div className="mt-6 w-full max-w-md bg-[#EFF2F9] p-4 rounded-lg shadow-md">
+                  <h3 className="text-lg font-bold mb-2">Response :</h3>
+                  <p>{response}</p>
+                </div>
+              )}
             </div>
           </dialog>
           <input
