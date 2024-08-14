@@ -36,7 +36,7 @@ export default function RegisterPage() {
   return (
     <div className="h-screen flex">
       <div className="flex w-[75%] h-[70%] m-auto rounded-3xl drop-shadow-xl">
-        <div className="w-[50%] bg-[#6A74C9] rounded-l-3xl p-16 relative">
+        <div className="hidden lg:block w-[50%] bg-[#6A74C9] rounded-l-3xl p-16 relative">
           <h1 className="font-extrabold text-5xl text-[#FFFFFF]">
             Welcome to <br />
             SpaceChat
@@ -47,8 +47,9 @@ export default function RegisterPage() {
           </p>
           <img src="/group.png" className="absolute bottom-0 w-[80%]" alt="" />
         </div>
-        <div className="w-[50%] bg-[#FFFFFF] rounded-r-3xl p-16">
+        <div className="w-[100%] lg:w-[50%] lg:bg-[#FFFFFF] rounded-r-3xl py-16 lg:px-16">
           <h1 className="font-extrabold text-4xl text-center">Register</h1>
+          <h1 className="lg:hidden font-extrabold text-4xl text-center">SpaceChat</h1>
           <form className="mt-10" onSubmit={handlerRegister}>
             <label className="input input-bordered flex items-center gap-2 px-8 py-7 rounded-full mt-5">
               <b className="font-bold">Name:</b>

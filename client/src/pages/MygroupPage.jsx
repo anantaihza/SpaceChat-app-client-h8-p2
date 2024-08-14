@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import CardGroup from '../components/CardGroup';
 import { UserContext } from '../contexts/UserContext';
 import axios from '../config/axiosInstance';
+import { Link } from 'react-router-dom';
 // import { MyGroupContext } from '../contexts/MyGroupContext';
 
 export default function MygroupPage() {
@@ -25,6 +26,22 @@ export default function MygroupPage() {
     }
   };
 
+  const handlerDelete = async (gropId) => {
+    try {
+      const {data} = await axios({
+        method: "delete",
+        url: `/myGroups/${gropId}`,
+        headers: {
+          Authorization: `Bearer ${localStorage.access_token}`,
+        },
+      })
+
+      fetchMyGroup()
+    } catch (error) {
+      console.log(error.response.data.message)
+    }
+  }
+
   useEffect(() => {
     fetchMyGroup();
   }, []);
@@ -35,18 +52,18 @@ export default function MygroupPage() {
       <div className="breadcrumbs text-sm mt-3 font-medium">
         <ul>
           <li className="text-slate-400">
-            <a>Home</a>
+            <Link to="/">Home</Link>
           </li>
-          <li className="text-slate-400">List group</li>
+          <li className="text-slate-400">My groups</li>
         </ul>
       </div>
       <h1 className="font-bold text-5xl mt-3">
-        Hello <span className="text-[#6A74C9]">{user.name}</span>
+        Let's chat, <span className="text-[#6A74C9]">{user.name}</span>
       </h1>
       <p className="mt-3 text-slate-400 w-[100%] md:w-[50%]">Welcome</p>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 mt-14">
         {myGroups.map((myGroup) => {
-          return <CardGroup key={myGroup.id} myGroup={myGroup} />;
+          return <CardGroup key={myGroup.id} myGroup={myGroup} handlerDelete={handlerDelete} />;
         })}
       </div>
     </div>

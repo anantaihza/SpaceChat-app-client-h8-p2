@@ -1,16 +1,23 @@
-import React, { useContext } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserContext } from '../contexts/UserContext';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser } from '../redux/features/userSlice';
 
 export default function Sidebar() {
-  const user = useContext(UserContext);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
 
   const handlerLogout = () => {
-    localStorage.clear()
-    navigate("/login")
+    localStorage.clear();
+    navigate('/login');
+  };
 
-  }
+  useEffect(() => {
+    dispatch(getUser());
+  }, []);
+
   return (
     <>
       <button
@@ -113,10 +120,17 @@ export default function Sidebar() {
                 >
                   <div className="avatar online">
                     <div className="w-8 h-8 rounded-full my-auto ring-[#6A74C9] ring-offset-base-100 ring ring-offset-2">
-                      <img
-                        className=""
-                        src="https://static.vecteezy.com/system/resources/previews/027/245/487/non_2x/male-3d-avatar-free-png.png"
-                      />
+                      {user.img ? (
+                        <img
+                          className=""
+                          src={user.img}
+                        />
+                      ) : (
+                        <img
+                          className=""
+                          src="https://static.vecteezy.com/system/resources/previews/027/245/487/non_2x/male-3d-avatar-free-png.png"
+                        />
+                      )}
                     </div>
                   </div>
                   <div className="">
