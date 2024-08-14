@@ -7,11 +7,13 @@ import router from './routers/router.jsx';
 
 import { ToastContainer } from 'react-toastify';
 
-  import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  // <StrictMode>
+  <>
     <ToastContainer />
     <RouterProvider router={router} />
-  </StrictMode>
+  </>
+  // </StrictMode>
 );

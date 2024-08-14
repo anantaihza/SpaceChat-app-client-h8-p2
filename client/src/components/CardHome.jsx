@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 export default function CardHome({ group }) {
-  const img = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
   const navigate = useNavigate();
 
   const handlerJoin = async (id) => {
@@ -29,11 +28,8 @@ export default function CardHome({ group }) {
 
   return (
     <div
-      className={
-        "card shadow-xl hover:shadow-[0px_20px_50px_10px_rgba(165,_39,_255,_0.48)] bg-center hover:scale-110 transition ease-in-out delay-50 duration-300 relative bg-no-repeat bg-cover bg-[url('" +
-        img +
-        "')]"
-      }
+      className="card shadow-xl hover:shadow-[0px_20px_50px_10px_rgba(165,_39,_255,_0.48)] bg-center hover:scale-110 transition ease-in-out delay-50 duration-300 relative bg-no-repeat bg-cover"
+      style={{ backgroundImage: 'url(' + group.imgGroupUrl + ')' }}
     >
       <div className="p-10 h-56 text-white relative">
         <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-[#6A74C9] to-transparent">
