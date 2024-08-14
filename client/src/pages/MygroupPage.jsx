@@ -46,7 +46,7 @@ export default function MygroupPage() {
       <p className="mt-3 text-slate-400 w-[100%] md:w-[50%]">Welcome</p>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 mt-14">
         {myGroups.map((myGroup) => {
-          return <CardGroup myGroup={myGroup} />;
+          return <CardGroup key={myGroup.id} myGroup={myGroup} />;
         })}
       </div>
     </div>

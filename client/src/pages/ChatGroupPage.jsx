@@ -1,31 +1,79 @@
 import axios from '../config/axiosInstance';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import io from 'socket.io-client';
+import { UserContext } from '../contexts/UserContext';
+import BubleEnd from '../components/chatGroup/BubleEnd';
+import BubleStart from '../components/chatGroup/BubleStart';
+
+const socket = io.connect('http://localhost:3000');
 
 export default function ChatGroupPage() {
-  const {id} = useParams()
+  const { id } = useParams();
+  const user = useContext(UserContext);
+  const room = id;
+  const nameUser = user.name;
+  const [chatList, setChatList] = useState([]);
+
+  const joinRoom = () => {
+    socket.emit('join_room', room);
+  };
+
+  useEffect(() => {
+    joinRoom();
+  }, []);
+
+  const [currentMessage, setCurrentMessage] = useState('');
+
+  const sendMessage = async () => {
+    if (currentMessage !== '') {
+      const messageData = {
+        room: room,
+        id: user.id,
+        author: nameUser,
+        message: currentMessage,
+        time:
+          new Date(Date.now()).getHours() +
+          ':' +
+          new Date(Date.now()).getMinutes(),
+      };
+
+      setCurrentMessage('');
+      await socket.emit('send_message', messageData);
+      setChatList((list) => [...list, messageData]);
+
+    }
+  };
+
+  useEffect(() => {
+    socket.on('receive_message', (data) => {
+      console.log(data);
+      setChatList((list) => [...list, data]);
+    });
+  }, [socket]);
+
   const [question, setQuestion] = useState('');
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
-  const [groupDetail, setGroupDetail] = useState({})
+  const [groupDetail, setGroupDetail] = useState({});
 
   const fetchGroupDetail = async (id) => {
     try {
-      const {data} = await axios({
-        method: "get",
+      const { data } = await axios({
+        method: 'get',
         url: `/myGroups/${id}/detail`,
         headers: {
           Authorization: `Bearer ${localStorage.access_token}`,
         },
-      })
+      });
 
-      console.log(data)
-      setGroupDetail(data)
+      console.log(data);
+      setGroupDetail(data);
     } catch (error) {
-      toast.error(error.response.data.message)
+      toast.error(error.response.data.message);
     }
-  }
+  };
 
   const handleSubmitAPI = async (e) => {
     e.preventDefault();
@@ -56,7 +104,7 @@ export default function ChatGroupPage() {
   };
 
   useEffect(() => {
-    fetchGroupDetail(id)
+    fetchGroupDetail(id);
   }, []);
 
   return (
@@ -65,43 +113,21 @@ export default function ChatGroupPage() {
         <div className="flex items-center">
           <div className="avatar">
             <div className="w-10 rounded-full mr-4">
-              <img
-                alt="Penerima"
-                src={groupDetail?.Group?.imgGroupUrl}
-              />
+              <img alt="Penerima" src={groupDetail?.Group?.imgGroupUrl} />
               /&gt;
             </div>
           </div>
-          <div className="text-lg font-bold text-gray-800">{groupDetail?.Group?.name}</div>
+          <div className="text-lg font-bold text-gray-800">
+            {groupDetail?.Group?.name}
+          </div>
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto px-20">
-        <div className="chat chat-start px-4">
-          <div className="chat-image avatar">
-            <div className="w-10 rounded-full">
-              <img
-                alt="Tailwind CSS chat bubble component"
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-              />
-            </div>
-          </div>
-          <div className="chat-header">Obi-Wan Kenobi</div>
-          <div className="chat-bubble">You were the Chosen One!</div>
-        </div>
+      <div className="flex-1 overflow-y-auto px-20 mt-10">
+        {chatList.map((chat, index) => {
+          return user.id === chat.id ? <BubleEnd key={index} chat={chat} /> : <BubleStart key={index} chat={chat} />;
+        })}
+      </div>
 
-        <div className="chat chat-end px-4">
-          <div className="chat-image avatar">
-            <div className="w-10 rounded-full">
-              <img
-                alt="Tailwind CSS chat bubble component"
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-              />
-            </div>
-          </div>
-          <div className="chat-header">Anakin</div>
-          <div className="chat-bubble">I hate you!</div>
-        </div>
-      </div>
       <div className="px-20 py-4 bg-white border-t border-gray-200">
         <div className="flex items-center">
           {/* You can open the modal using ID.showModal() method */}
@@ -149,7 +175,10 @@ export default function ChatGroupPage() {
                 {/* <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
                   ✕
                 </button> */}
-                <button type='submit' className="btn btn-md rounded-lg text-white bg-[#6A74C9]">
+                <button
+                  type="submit"
+                  className="btn btn-md rounded-lg text-white bg-[#6A74C9]"
+                >
                   SUBMIT
                 </button>
               </form>
@@ -164,9 +193,14 @@ export default function ChatGroupPage() {
           <input
             type="text"
             placeholder="Type a message..."
+            value={currentMessage}
             className="flex-1 p-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6A74C9] pr-16"
+            onChange={(e) => setCurrentMessage(e.target.value)}
           />
-          <button className="text-[#6A74C9] p-2 rounded-lg ml-2">
+          <button
+            className="text-[#6A74C9] p-2 rounded-lg ml-2"
+            onClick={sendMessage}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
