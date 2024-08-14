@@ -4,11 +4,13 @@ import { UserContext } from '../contexts/UserContext';
 import axios from '../config/axiosInstance';
 import { Link } from 'react-router-dom';
 // import { MyGroupContext } from '../contexts/MyGroupContext';
+import { useSelector } from 'react-redux';
 
 export default function MygroupPage() {
-  const user = useContext(UserContext);
+  // const user = useContext(UserContext);
   const [myGroups, setMyGroups] = useState([]);
   // const myGroups = useContext(MyGroupContext);
+  const { user } = useSelector((state) => state.user);
 
   const fetchMyGroup = async () => {
     try {
@@ -28,19 +30,19 @@ export default function MygroupPage() {
 
   const handlerDelete = async (gropId) => {
     try {
-      const {data} = await axios({
-        method: "delete",
+      const { data } = await axios({
+        method: 'delete',
         url: `/myGroups/${gropId}`,
         headers: {
           Authorization: `Bearer ${localStorage.access_token}`,
         },
-      })
+      });
 
-      fetchMyGroup()
+      fetchMyGroup();
     } catch (error) {
-      console.log(error.response.data.message)
+      console.log(error.response.data.message);
     }
-  }
+  };
 
   useEffect(() => {
     fetchMyGroup();
@@ -63,7 +65,13 @@ export default function MygroupPage() {
       <p className="mt-3 text-slate-400 w-[100%] md:w-[50%]">Welcome</p>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 mt-14">
         {myGroups.map((myGroup) => {
-          return <CardGroup key={myGroup.id} myGroup={myGroup} handlerDelete={handlerDelete} />;
+          return (
+            <CardGroup
+              key={myGroup.id}
+              myGroup={myGroup}
+              handlerDelete={handlerDelete}
+            />
+          );
         })}
       </div>
     </div>

@@ -1,12 +1,14 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { GroupContext } from '../contexts/GroupContext';
-import { UserContext } from '../contexts/UserContext';
+// import { UserContext } from '../contexts/UserContext';'
+import { useSelector } from 'react-redux';
 import CardHome from '../components/CardHome';
 
 export default function HomePage() {
   const groups = useContext(GroupContext);
-  const user = useContext(UserContext)
+  // const user = useContext(UserContext)
+  const { user } = useSelector((state) => state.user);
 
   return (
     <div className="px-20 py-16 sm:ml-64 min-h-screen">

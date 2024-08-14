@@ -1,13 +1,24 @@
-import React, { useState } from "react";
-import axios from "../config/axiosInstance";
-import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import axios from '../config/axiosInstance';
+import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
+import { getUser } from '../redux/features/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function UpdateProfilePage() {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(false);
-  const [username, setUsername] = useState("");
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const [image, setImage] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      setUsername(user.username);
+      setName(user.name);
+    }
+  }, [user]);
 
   const handleFileChange = (e) => {
     setImage(e.target.files[0]);
@@ -20,28 +31,29 @@ export default function UpdateProfilePage() {
       setIsLoading(true);
       const dataUploadImage = new FormData();
       if (name) {
-        dataUploadImage.append("name", name);
+        dataUploadImage.append('name', name);
       }
       if (username) {
-        dataUploadImage.append("username", username);
+        dataUploadImage.append('username', username);
       }
       if (image) {
-        dataUploadImage.append("avatar", image);
+        dataUploadImage.append('avatar', image);
       }
 
       const { data } = await axios({
-        method: "put",
-        url: "/profile/update",
+        method: 'put',
+        url: '/profile/update',
         headers: {
           Authorization: `Bearer ${localStorage.access_token}`,
         },
         data: dataUploadImage,
       });
       console.log(data);
-      toast.success("Profile updated successfully");
+      toast.success('Profile updated successfully');
+      dispatch(getUser());
     } catch (error) {
       console.log(error);
-      toast.error("Error updating profile.");
+      toast.error('Error updating profile.');
     } finally {
       setIsLoading(false);
     }
@@ -59,7 +71,7 @@ export default function UpdateProfilePage() {
             <input
               type="text"
               className="w-full sm:flex-1 grow border-none focus:ring-transparent"
-              value={name}
+              defaultValue={name}
               onChange={(e) => setName(e.target.value)}
               placeholder=""
             />
@@ -69,7 +81,7 @@ export default function UpdateProfilePage() {
             <input
               type="text"
               className="w-full sm:flex-1 grow border-none focus:ring-transparent"
-              value={username}
+              defaultValue={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder=""
             />
