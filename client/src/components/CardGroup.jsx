@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function CardGroup({ myGroup }) {
+export default function CardGroup({ myGroup, handlerDelete }) {
   return (
     <div className="card shadow-xl hover:shadow-[0px_20px_50px_10px_rgba(165,_39,_255,_0.48)] bg-center hover:scale-110 transition ease-in-out delay-50 duration-300 relative bg-no-repeat bg-cover bg-[url('https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')]">
       <div className="p-10 h-56 text-white relative">
@@ -18,7 +18,7 @@ export default function CardGroup({ myGroup }) {
               <Link to={`/my-groups/${myGroup.Group.id}`} className="btn btn-sm rounded-full px-8 mt-5">
                 Enter The Chat
               </Link>
-              <button className="btn btn-sm rounded-full px-8 mt-5" disabled>
+              <button className="btn btn-sm rounded-full px-8 mt-5" onClick={() => handlerDelete(myGroup.id)}>
                 Leave
               </button>
             </div>
