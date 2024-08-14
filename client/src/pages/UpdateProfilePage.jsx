@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 export default function UpdateProfilePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [image, setImage] = useState(null);
 
   const handleFileChange = (e) => {
@@ -18,7 +19,15 @@ export default function UpdateProfilePage() {
     try {
       setIsLoading(true);
       const dataUploadImage = new FormData();
-      dataUploadImage.append("avatar", image);
+      if (name) {
+        dataUploadImage.append("name", name);
+      }
+      if (username) {
+        dataUploadImage.append("username", username);
+      }
+      if (image) {
+        dataUploadImage.append("avatar", image);
+      }
 
       const { data } = await axios({
         method: "put",
@@ -46,6 +55,16 @@ export default function UpdateProfilePage() {
         </h2>
         <form onSubmit={handleSetImage} className="space-y-4 sm:space-y-6">
           <label className="input input-bordered input-md flex flex-col sm:flex-row items-start sm:items-center rounded-full mt-5">
+            <b className="font-bold mb-2 sm:mb-0 sm:mr-2">Name:</b>
+            <input
+              type="text"
+              className="w-full sm:flex-1 grow border-none focus:ring-transparent"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder=""
+            />
+          </label>
+          <label className="input input-bordered input-md flex flex-col sm:flex-row items-start sm:items-center rounded-full mt-5">
             <b className="font-bold mb-2 sm:mb-0 sm:mr-2">Username:</b>
             <input
               type="text"
@@ -68,7 +87,10 @@ export default function UpdateProfilePage() {
               UPDATE
             </button>
 
-            <Link to='/'  className="bg-neutral btn btn-md w-full sm:w-auto px-8 py-2 text-lg rounded-full text-white hover:bg-neutral-800">
+            <Link
+              to="/"
+              className="bg-neutral btn btn-md w-full sm:w-auto px-8 py-2 text-lg rounded-full text-white hover:bg-neutral-800"
+            >
               CANCEL
             </Link>
           </div>
