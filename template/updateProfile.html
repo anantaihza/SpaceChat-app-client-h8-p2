@@ -1,11 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Profile</title>
-</head>
-<body>
-    
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Card Centered</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+  <body
+    class="h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat bg-[#EFF2F9]"
+  >
+    <div
+      class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4 sm:mx-6 lg:mx-8 text-center"
+    >
+      <h2 class="text-2xl text-[#6A74C9] font-bold mb-4 sm:mb-6">
+        EDIT PROFILE
+      </h2>
+      <form class="space-y-4 sm:space-y-6">
+        <label
+          class="input input-bordered input-md flex flex-col sm:flex-row items-start sm:items-center rounded-full mt-5"
+        >
+          <b class="font-bold mb-2 sm:mb-0 sm:mr-2">Username:</b>
+          <input type="text" class="w-full sm:flex-1 grow" placeholder="" />
+        </label>
+        <input
+          type="file"
+          class="file-input file-input-bordered w-full file-input-md rounded-3xl"
+        />
+        <div
+          class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4"
+        >
+          <button
+            class="bg-[#6A74C9] btn btn-md w-full sm:w-auto px-8 py-2 text-lg rounded-full text-white hover:bg-[#5a66b2]"
+          >
+            UPDATE
+          </button>
+          <button
+            class="bg-neutral btn btn-md w-full sm:w-auto px-8 py-2 text-lg rounded-full text-white hover:bg-neutral-800"
+          >
+            CANCEL
+          </button>
+        </div>
+      </form>
+    </div>
+  </body>
 </html>
