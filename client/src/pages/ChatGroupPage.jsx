@@ -3,18 +3,22 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import io from 'socket.io-client';
-import { UserContext } from '../contexts/UserContext';
+// import { UserContext } from '../contexts/UserContext';
+import { getUser } from '../redux/features/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import BubleEnd from '../components/chatGroup/BubleEnd';
 import BubleStart from '../components/chatGroup/BubleStart';
 
-const socket = io.connect('http://localhost:3000');
+const socket = io.connect('https://naufalbigcat.my.id/');
 
 export default function ChatGroupPage() {
   const { id } = useParams();
-  const user = useContext(UserContext);
+  // const user = useContext(UserContext);
   const room = id;
-  const nameUser = user.name;
+  // const nameUser = user.name;
   const [chatList, setChatList] = useState([]);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
 
   const joinRoom = () => {
     socket.emit('join_room', room);
@@ -22,32 +26,34 @@ export default function ChatGroupPage() {
 
   useEffect(() => {
     joinRoom();
+    dispatch(getUser());
   }, []);
 
   const [currentMessage, setCurrentMessage] = useState('');
 
   const sendMessage = async () => {
     if (currentMessage !== '') {
-      let hours = new Date(Date.now()).getHours()
-      let minutes = new Date(Date.now()).getMinutes()
-      hours = hours < 10 ? "0" + hours : hours
-      minutes = minutes < 10 ? "0" + minutes : minutes
+      let hours = new Date(Date.now()).getHours();
+      let minutes = new Date(Date.now()).getMinutes();
+      hours = hours < 10 ? '0' + hours : hours;
+      minutes = minutes < 10 ? '0' + minutes : minutes;
 
-      let img = user.img ? user.img : "https://static.vecteezy.com/system/resources/previews/027/245/487/non_2x/male-3d-avatar-free-png.png"
+      // let img = user.img ? user.img : "https://static.vecteezy.com/system/resources/previews/027/245/487/non_2x/male-3d-avatar-free-png.png"
 
       const messageData = {
         room: room,
         id: user.id,
-        author: nameUser,
+        author: user.name,
         message: currentMessage,
-        img: img,
-        time: hours + ":" + minutes,
+        img: user.img
+          ? user.img
+          : 'https://static.vecteezy.com/system/resources/previews/027/245/487/non_2x/male-3d-avatar-free-png.png',
+        time: hours + ':' + minutes,
       };
 
       setCurrentMessage('');
       await socket.emit('send_message', messageData);
       setChatList((list) => [...list, messageData]);
-
     }
   };
 
@@ -119,7 +125,7 @@ export default function ChatGroupPage() {
           <div className="avatar">
             <div className="w-10 rounded-full mr-4">
               <img alt="Penerima" src={groupDetail?.Group?.imgGroupUrl} />
-              /&gt; 
+              /&gt;
             </div>
           </div>
           <div className="text-lg font-bold text-gray-800">
@@ -129,7 +135,11 @@ export default function ChatGroupPage() {
       </div>
       <div className="flex-1 overflow-y-auto px-20 my-28">
         {chatList.map((chat, index) => {
-          return user.id === chat.id ? <BubleEnd key={index} chat={chat} /> : <BubleStart key={index} chat={chat} />;
+          return user.id === chat.id ? (
+            <BubleEnd key={index} chat={chat} />
+          ) : (
+            <BubleStart key={index} chat={chat} />
+          );
         })}
       </div>
 
