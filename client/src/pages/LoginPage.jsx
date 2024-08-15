@@ -10,7 +10,7 @@ export default function LoginPage() {
 
   const handlerLogin = async (e) => {
     try {
-      e.preventDefault()
+      e.preventDefault();
       const { data } = await axios({
         method: 'post',
         url: '/login',
@@ -29,7 +29,7 @@ export default function LoginPage() {
       navigate('/');
     } catch (error) {
       // error.response.data.message.map((msg) => toast.error(msg));
-      toast.error(error.response.data.message)
+      toast.error(error.response.data.message);
       console.log(error.response.data.message);
     }
   };
@@ -43,14 +43,16 @@ export default function LoginPage() {
             SpaceChat
           </h1>
           <p className="mt-8 text-[#FFFFFF]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi ea
-            quod enim assumenda perspiciatis reiciendis, repudiandae
+            SpaceChat is a platform that connects professionals and programming
+            enthusiasts from diverse backgrounds and regions.
           </p>
           <img src="/group.png" className="absolute bottom-0 w-[80%]" alt="" />
         </div>
         <div className="w-[100%] lg:w-[50%] lg:bg-[#FFFFFF] rounded-r-3xl p-16">
           <h1 className="font-extrabold text-4xl text-center">Login</h1>
-          <h1 className="lg:hidden font-extrabold text-4xl text-center">SpaceChat</h1>
+          <h1 className="lg:hidden font-extrabold text-4xl text-center">
+            SpaceChat
+          </h1>
           <form className="mt-20" onSubmit={handlerLogin}>
             <label className="input input-bordered flex items-center gap-2 px-8 py-8 rounded-full mt-5">
               <b className="font-bold">Email:</b>

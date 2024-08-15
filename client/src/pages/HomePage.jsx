@@ -25,9 +25,8 @@ export default function HomePage() {
         Hello <span className="text-[#6A74C9]">{user.name}</span>
       </h1>
       <p className="mt-3 text-slate-400 w-[100%] md:w-[50%]">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut et quasi
-        expedita ipsum eum nemo, commodi optio, similique modi maiores tempora,
-        cumque.
+        Join various community groups to discuss, share knowledge, and learn
+        together based on your specific interests in technology.
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 mt-14">
         {groups.map((group) => {
