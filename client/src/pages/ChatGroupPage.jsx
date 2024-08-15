@@ -28,15 +28,20 @@ export default function ChatGroupPage() {
 
   const sendMessage = async () => {
     if (currentMessage !== '') {
+      let hours = new Date(Date.now()).getHours()
+      let minutes = new Date(Date.now()).getMinutes()
+      hours = hours < 10 ? "0" + hours : hours
+      minutes = minutes < 10 ? "0" + minutes : minutes
+
+      let img = user.img ? user.img : "https://static.vecteezy.com/system/resources/previews/027/245/487/non_2x/male-3d-avatar-free-png.png"
+
       const messageData = {
         room: room,
         id: user.id,
         author: nameUser,
         message: currentMessage,
-        time:
-          new Date(Date.now()).getHours() +
-          ':' +
-          new Date(Date.now()).getMinutes(),
+        img: img,
+        time: hours + ":" + minutes,
       };
 
       setCurrentMessage('');
@@ -109,12 +114,12 @@ export default function ChatGroupPage() {
 
   return (
     <div className="flex-1 flex flex-col sm:ml-64 min-h-screen">
-      <div className="flex items-center justify-between px-20 py-4 bg-gray-100 border-b border-gray-200">
+      <div className="flex items-center justify-between px-20 py-4 md:fixed top-20 md:top-0 left-64 right-0 z-30 bg-white border-b border-gray-200">
         <div className="flex items-center">
           <div className="avatar">
             <div className="w-10 rounded-full mr-4">
               <img alt="Penerima" src={groupDetail?.Group?.imgGroupUrl} />
-              /&gt;
+              /&gt; 
             </div>
           </div>
           <div className="text-lg font-bold text-gray-800">
@@ -122,13 +127,13 @@ export default function ChatGroupPage() {
           </div>
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto px-20 mt-10">
+      <div className="flex-1 overflow-y-auto px-20 my-28">
         {chatList.map((chat, index) => {
           return user.id === chat.id ? <BubleEnd key={index} chat={chat} /> : <BubleStart key={index} chat={chat} />;
         })}
       </div>
 
-      <div className="px-20 py-4 bg-white border-t border-gray-200">
+      <div className="px-20 py-4 bg-white border-t border-gray-200 fixed bottom-0 right-0 left-0 sm:left-64 z-30">
         <div className="flex items-center">
           {/* You can open the modal using ID.showModal() method */}
           <button
@@ -194,7 +199,7 @@ export default function ChatGroupPage() {
             type="text"
             placeholder="Type a message..."
             value={currentMessage}
-            className="flex-1 p-3 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6A74C9] pr-16"
+            className="flex-1 p-3 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#6A74C9] pr-16"
             onChange={(e) => setCurrentMessage(e.target.value)}
           />
           <button
