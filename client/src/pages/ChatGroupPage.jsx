@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import BubleEnd from '../components/chatGroup/BubleEnd';
 import BubleStart from '../components/chatGroup/BubleStart';
 
-const socket = io.connect('https://naufalbigcat.my.id/');
+const socket = io.connect('http://localhost:3000');
 
 export default function ChatGroupPage() {
   const { id } = useParams();
